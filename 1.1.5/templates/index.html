@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-md mx-auto">
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <h1 class="text-4xl font-bold mb-4 text-center" style="color: blue;">Mothi Bharade</h1>
+                <h3 class="text-2xl font-semibold mb-4 text-center">Number Analysis</h3>
+                <form method="POST" action="{{ url_for('analyze') }}">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Name:</label>
+                            <input type="text" name="name" class="mt-1 block w-full rounded-md border-gray-300"
+                                style="border: solid black 1px; padding: 4px;" placeholder="Enter your name" required />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Mobile Number:</label>
+                            <input type="text" name="mobileNumber" class="mt-1 block w-full rounded-md border-gray-300"
+                                style="border: solid black 1px; padding: 4px;"
+                                placeholder="Enter 10-digit mobile number" required />
+                        </div>
+
+                        <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md">Create
+                            Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+```[v0-no-op-code-block-prefix]
+
+For result.html, we need to make sure it's using all the variables we're passing from the app.py file:
+
+```html type="html" project="Number Analysis" file="templates/result.html"
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Analysis Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        .pair-good {
+            background-color: #29b65d;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .pair-very-good {
+            background-color: #008631;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .pair-bad {
+            background-color: #ff6262;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .pair-very-bad {
+            background-color: #ff0000;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-md mx-auto">
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <h1 class="text-4xl font-bold mb-4 text-center" style="color: blue;">Mothi Bharade</h1>
+                <h3 class="text-2xl font-semibold mb-4 text-center">Number Analysis Result</h3>
+                <p class="text-lg mb-4">Name: {{ name }}</p>
+                <p class="text-lg mb-4">Phone Number: {{ phone_number }}</p>
+
+                {% if matrix_output %}
+                <div class="mt-6 bg-white p-4 shadow rounded">
+                    <h3 class="text-lg font-semibold">1. Mobile Grid</h3>
+                    <pre>{{ matrix_output }}</pre>
+                </div>
+                {% endif %}
+
+                {% if pairs %}
+                <div class="mt-6 bg-white p-4 shadow rounded">
+                    <h3 class="text-lg font-semibold">2. Pairs Analysis</h3>
+                    <div class="mt-2">
+                        <strong>All Pairs:</strong>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            {% for pair in pairs %}
+                            <span class="px-2 rounded {{ pair_colors[pair] }}">{{ pair }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <strong>Categorized Pairs:</strong>
+                        {% for category, category_pairs in categorized_pairs.items() %}
+                        <div class="mt-2">
+                            <div class="font-medium">{{ category }} ({{ category_pairs|length }}):</div>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                {% for pair in category_pairs %}
+                                <span class="px-2 rounded {{ pair_colors[pair] }}">{{ pair }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if pyramid_output %}
+                <div class="mt-6 bg-white p-4 shadow rounded">
+                    <h3 class="text-lg font-semibold">3. Magic Pyramid</h3>
+                    <pre>{{ pyramid_output }}</pre>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

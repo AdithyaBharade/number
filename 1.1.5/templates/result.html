@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Analysis Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        .pair-good {
+            background-color: #29b65d;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .pair-very-good {
+            background-color: #008631;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .pair-bad {
+            background-color: #ff6262;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .pair-very-bad {
+            background-color: #ff0000;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-md mx-auto">
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <h1 class="text-4xl font-bold mb-4 text-center" style="color: blue;">Mothi Bharade</h1>
+                <h3 class="text-2xl font-semibold mb-4 text-center">Number Analysis Result</h3>
+
+                {% if matrix_output %}
+                <div class="mt-6 bg-white p-4 shadow rounded">
+                    <h3 class="text-lg font-semibold">1. Mobile Grid</h3>
+                    <pre>{{ matrix_output | replace("Total = ", "<span class='text-xl font-bold'>Total = ") | replace("\n`", "</span>\n`") | safe }}</pre>
+                </div>
+                {% endif %}
+
+                {% if pairs %}
+                <div class="mt-6 bg-white p-4 shadow rounded">
+                    <h3 class="text-lg font-semibold">2. Pairs Analysis</h3>
+                    <div class="mt-2">
+                        <strong>All Pairs:</strong>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            {% for pair in pairs %}
+                            <span class="px-2 rounded {{ pair_colors[pair] }}">{{ pair }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <strong>Categorized Pairs:</strong>
+                        {% for category, category_pairs in categorized_pairs.items() %}
+                        <div class="mt-2">
+                            <div class="font-medium">{{ category }} ({{ category_pairs|length }}):</div>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                {% for pair in category_pairs %}
+                                <span class="px-2 rounded {{ pair_colors[pair] }}">{{ pair }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if pyramid_output %}
+                <div class="mt-6 bg-white p-4 shadow rounded">
+                    <h3 class="text-lg font-semibold">3. Magic Pyramid</h3>
+                    <pre>{{ pyramid_output | replace("Total = ", "<span class='text-xl font-bold'>Total = ") | replace("\n", "</span>\n", 1) | safe }}</pre>
+                </div>
+                {% endif %}
+                <div class="mt-6">
+                    <a href="{{ url_for('home') }}"
+                        class="block w-full bg-blue-500 text-white py-2 rounded-md text-center">Finish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
